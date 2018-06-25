@@ -17,7 +17,7 @@
 "   2: Resolve all symbolic links
 "   3: Get the folder of the resolved absolute file
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
-" echom "misc.vim is in " . s:path
+" echom "selfuse.vim is in " . s:path
 let s:shell_command = ''
 
 fu! s:get_shell_command()
@@ -31,7 +31,7 @@ fu! s:get_shell_command()
   return s:shell_command
 endf
 " open the selection in Internet Explorer so it can be copied as rich text
-fu! misc#OpenInIE() range
+fu! selfuse#OpenInIE() range
     execute a:firstline . "," . a:lastline . 'TOhtml'
     silent !start "C:\Program Files (x86)\Internet Explorer\iexplore.exe" %:p
     sleep 2
@@ -39,7 +39,7 @@ fu! misc#OpenInIE() range
     q!
 endf
 
-fu! misc#OpenInChrome() range
+fu! selfuse#OpenInChrome() range
     execute a:firstline . "," . a:lastline . 'TOhtml'
     silent !start "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" %:p
     sleep 2
@@ -53,12 +53,12 @@ fu! s:ClipboardGenerateHeader(html_start, html_end, frag_start, frag_end)
     \  "Version:0.9\r\n"
     \  . "StartHTML:%010d\r\nEndHTML:%010d\r\n"
     \  . "StartFragment:%010d\r\nEndFragment:%010d\r\n"
-    \  . "SourceURL:https://github.com/AbrahamSue/vim-misc\r\n",
+    \  . "SourceURL:https://github.com/AbrahamSue/vim-selfuse\r\n",
     \  a:html_start, a:html_end, a:frag_start, a:frag_end
     \  )
 endf
 
-fu! misc#ClipboardLoadHtml_Old(html_file, ...) abort
+fu! selfuse#ClipboardLoadHtml_Old(html_file, ...) abort
 
   let l:line_end = "\r\n"
   let l:line_end_length = strlen(l:line_end)
@@ -195,7 +195,7 @@ fu! misc#ClipboardLoadHtml_Old(html_file, ...) abort
 "  call delete(l:temp_html_file)
 endf
 
-fu! misc#ClipboardLoadHtml(html_file, ...) abort
+fu! selfuse#ClipboardLoadHtml(html_file, ...) abort
 " This PS1 script need admin access, I just start gvim as administrator
 " use 'powershell Start-Process powershell -Verb runAs ' to ask user each time
 " printf('powershell Start-Process powershell -Verb runAs -ExecutionPolicy ByPass -File "%s\\..\\plugin\\clipboard-ie-load-html.ps1" "%s"',
@@ -211,7 +211,7 @@ fu! misc#ClipboardLoadHtml(html_file, ...) abort
   endif
 endf
 
-fu! misc#WinClipboardHtmlYank(line1, line2)
+fu! selfuse#WinClipboardHtmlYank(line1, line2)
   " '< '>
   let l:tmpf0 = tempname()
   let l:tmpf = tempname()
@@ -223,7 +223,7 @@ fu! misc#WinClipboardHtmlYank(line1, line2)
   call system( printf('pandoc "%s" -s --self-contained --highlight-style kate -o "%s"', l:tmpf0, l:tmpf) )
 "  call system( printf('pandoc --template=github.html5 --self-contained "%s" -o "%s"', l:tmpf0, l:tmpf) )
 "  execute printf('!pandoc --template=github.html5 --self-contained "%s" -o "%s"', l:tmpf0, l:tmpf)
-  call misc#ClipboardLoadHtml(l:tmpf)
+  call selfuse#ClipboardLoadHtml(l:tmpf)
 "  call delete(l:tmpf)
 "  call delete(l:tmpf0)
   redraw!
@@ -231,7 +231,7 @@ fu! misc#WinClipboardHtmlYank(line1, line2)
 endf
 
 
-fu! misc#jsBeautify(line1, line2)
+fu! selfuse#jsBeautify(line1, line2)
 "  echo "line1 = " . a:line1 . " line2 = ". a:line2
 "
   py3  << EOF
@@ -253,19 +253,19 @@ vim.current.buffer.append(res)
 EOF
 endf
 
-fu! misc#AutoLayout(...) abort
+fu! selfuse#AutoLayout(...) abort
   " if winheight(0) > 60|wincmd K|else|wincmd L|endif
   if &lines * 3 > &columns | wincmd K | else | wincmd L | endif
 endf
 
 " tab自动区分补全和缩进 {{{2
-function! misc#InsertTabWrapper()
+function! selfuse#InsertTabWrapper()
     let col = col('.') - 1
     if !col || getline('.')[col - 1] !~ '\k' | return "\<tab>"
     else | return "\<c-p>"
     endif
 endfunction
-" inoremap <tab> <c-r>=misc#InsertTabWrapper()<cr>
+" inoremap <tab> <c-r>=selfuse#InsertTabWrapper()<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""}}}
 
 " 自动完成括号 {{{2
@@ -285,7 +285,7 @@ endfunction
 ":nnoremap d :call FlashShowLineNumber(1)<CR>d
 ":nnoremap y :call FlashShowLineNumber(1)<CR>y
 ":nnoremap - :call FlashShowLineNumber(1)<CR>
-function! misc#FlashShowLineNumber( action )
+function! selfuse#FlashShowLineNumber( action )
         if a:action == 1 | :set number   | :set relativenumber   | :au CursorMoved,CursorMovedI * call FlashShowLineNumber(0)
     elseif a:action == 2 | :set number   | :set relativenumber   | :au CursorMoved,CursorMovedI * call FlashShowLineNumber(0)
                     else | :set nonumber | :set norelativenumber | :au! CursorMoved,CursorMovedI *
